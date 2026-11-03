@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: finance-api
+  datasource:
+    url: jdbc:postgresql://localhost:5433/finance
+    username: finance
+    password: finance_dev_pw
+  jpa:
+    hibernate:
+      ddl-auto: validate      # Flyway owns the schema; Hibernate only checks it
+    open-in-view: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
