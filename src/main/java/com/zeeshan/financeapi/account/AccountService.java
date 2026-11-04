@@ -30,4 +30,21 @@ public class AccountService {
                 .map(AccountResponse::from)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public AccountResponse get(Long id) {
+        return AccountResponse.from(findOwnedAccount(id));
+    }
+
+    @Transactional
+    public AccountResponse rename(Long id, UpdateAccountRequest request) {
+        Account account = findOwnedAccount(id);
+        account.rename(request.name());
+        return AccountResponse.from(account);
+    }
+
+    private Account findOwnedAccount(Long id) {
+        return accountRepository.findByIdAndUserId(id, CURRENT_USER_ID)
+                .orElseThrow(() -> new AccountNotFoundException(id));
+    }
 }
