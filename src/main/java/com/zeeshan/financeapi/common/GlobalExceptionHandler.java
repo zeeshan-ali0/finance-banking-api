@@ -1,6 +1,7 @@
 package com.zeeshan.financeapi.common;
 
 import com.zeeshan.financeapi.account.AccountNotFoundException;
+import com.zeeshan.financeapi.category.DuplicateCategoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccountNotFoundException.class)
     public ProblemDetail accountNotFound(AccountNotFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+    @ExceptionHandler(DuplicateCategoryException.class)
+    public ProblemDetail duplicateCategory(DuplicateCategoryException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
