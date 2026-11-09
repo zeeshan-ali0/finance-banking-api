@@ -56,6 +56,14 @@ public class Account {
         this.name = newName;
     }
 
+    public void deposit(BigDecimal amount) {
+        this.balance = this.balance.add(amount);
+    }
+
+    public void withdraw(BigDecimal amount) {
+        this.balance = this.balance.subtract(amount);
+    }
+
     public Long getId() { return id; }
     public Long getUserId() { return userId; }
     public String getName() { return name; }

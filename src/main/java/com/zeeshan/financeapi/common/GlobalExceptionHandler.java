@@ -1,7 +1,10 @@
 package com.zeeshan.financeapi.common;
 
 import com.zeeshan.financeapi.account.AccountNotFoundException;
+import com.zeeshan.financeapi.category.CategoryNotFoundException;
 import com.zeeshan.financeapi.category.DuplicateCategoryException;
+import com.zeeshan.financeapi.transaction.CategoryTypeMismatchException;
+import com.zeeshan.financeapi.transaction.TransactionNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -48,10 +51,18 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST, "The id in the URL must be a number");
     }
 
-    @ExceptionHandler(AccountNotFoundException.class)
-    public ProblemDetail accountNotFound(AccountNotFoundException ex) {
+    @ExceptionHandler({AccountNotFoundException.class,
+            CategoryNotFoundException.class,
+            TransactionNotFoundException.class})
+    public ProblemDetail notFound(RuntimeException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
+
+    @ExceptionHandler(CategoryTypeMismatchException.class)
+    public ProblemDetail categoryMismatch(CategoryTypeMismatchException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     @ExceptionHandler(DuplicateCategoryException.class)
     public ProblemDetail duplicateCategory(DuplicateCategoryException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
