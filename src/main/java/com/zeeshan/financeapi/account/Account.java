@@ -3,6 +3,7 @@ package com.zeeshan.financeapi.account;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "accounts")
@@ -36,7 +37,7 @@ public class Account {
 
     @PrePersist
     void onCreate() {
-        createdAt = Instant.now();
+        createdAt = Instant.now().truncatedTo(ChronoUnit.MICROS);
     }
 
     protected Account() {
@@ -48,7 +49,7 @@ public class Account {
         this.name = name;
         this.type = type;
         this.currency = currency;
-        this.balance = BigDecimal.ZERO;
+        this.balance = BigDecimal.ZERO.setScale(2);;
     }
 
     public void rename(String newName) {
